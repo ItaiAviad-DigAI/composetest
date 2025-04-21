@@ -106,5 +106,8 @@ def trim():
         except OSError as e:
             log.debug(f"Error deleting video file: {e}")
 
+    if not trimmed_video_path or not os.path.exists(trimmed_video_path):
+        return "Trimmed video not found", 404
+    
     log.debug((f"Video trimmed successfully: {video_path} to {trimmed_video_path}"))
     return send_file(f"{trimmed_video_path}")
