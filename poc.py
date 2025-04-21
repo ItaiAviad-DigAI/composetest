@@ -1,7 +1,7 @@
 import requests
 
 
-OUTPUT_PATH = "received_trimmed.mp4"
+TRIMMED_OUTPUT_PATH = "received_trimmed.mp4"
 
 url = "http://127.0.0.1:8000/trim"
 payload = {
@@ -14,9 +14,9 @@ try:
     response = requests.post(url, json=payload)
 
     if response.status_code == 200:
-        with open(OUTPUT_PATH, "wb") as f:
+        with open(TRIMMED_OUTPUT_PATH, "wb") as f:
             f.write(response.content)
-        print(f"✅ Video saved as {OUTPUT_PATH}")
+        print(f"✅ Video saved as {TRIMMED_OUTPUT_PATH}")
     else:
         print(f"❌ Error: {response.status_code} - {response.text}")
 except Exception as e:

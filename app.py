@@ -46,6 +46,7 @@ def trim_video(
     start_time: str = "00:00:00",
     end_time: str = "00:00:00",
 ):
+    """Trim a local video using ffmpeg from start_time to end_time"""
     try:
         log.debug(f"Trimming video: {video_path} from {start_time} to {end_time}")
         ffmpeg.input(video_path, ss=start_time, to=end_time).output(
@@ -69,6 +70,11 @@ def hello():
 
 @app.post("/trim")
 def trim():
+    """API endpoint to trim a video from a given URL
+
+    Returns:
+        - 200 OK: The trimmed video file (if successful)
+    """
     # Accept JSON and form data
     if request.is_json:
         data = request.get_json()
@@ -95,7 +101,9 @@ def trim():
     # Trim the video
     trimmed_video_path = f"trimmed_{video_path}"
     try:
-        trimmed_video_path = trim_video(video_path, trimmed_video_path, start_time, end_time)
+        trimmed_video_path = trim_video(
+            video_path, trimmed_video_path, start_time, end_time
+        )
     except Exception as e:
         return f"Failed to trim video. {e}", 500
     finally:
@@ -108,6 +116,8 @@ def trim():
 
     if not trimmed_video_path or not os.path.exists(trimmed_video_path):
         return "Trimmed video not found", 404
-    
+
     log.debug((f"Video trimmed successfully: {video_path} to {trimmed_video_path}"))
     return send_file(f"{trimmed_video_path}")
+
+
